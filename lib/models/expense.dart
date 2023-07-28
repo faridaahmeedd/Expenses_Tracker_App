@@ -40,14 +40,10 @@ class Expense {
     this.time = const TimeOfDay(hour: 10, minute: 10),
   });
   get formattedDate {
-    return date.day.toString() +
-        '/' +
-        date.month.toString() +
-        '/' +
-        date.year.toString();
+    return '${date.day}/${date.month}/${date.year}';
   }
 
   get formattedTime {
-    return time.hour.toString() + ':' + time.minute.toString();
+    return '${time.hour}:${time.minute}';
   }
 }

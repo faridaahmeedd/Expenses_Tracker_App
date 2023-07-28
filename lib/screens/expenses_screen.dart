@@ -18,6 +18,8 @@ class Expenses extends StatefulWidget {
 
 class _ExpensesState extends State<Expenses> {
   String errorMsg = '';
+  var isLoading = true;
+  final List<Expense> _expenses = [];
 
   @override
   void initState() {
@@ -26,64 +28,15 @@ class _ExpensesState extends State<Expenses> {
     _loadExpenses();
   }
 
-  final List<Expense> _expenses = [];
-
-  //   Expense(
-  //       title: 'Groceries',
-  //       amount: 100.00,
-  //       date: DateTime.now(),
-  //       time: TimeOfDay.now(),
-  //       category: Category.Food),
-  //   Expense(
-  //       title: 'Alexandria',
-  //       amount: 300.00,
-  //       date: DateTime.now(),
-  //       time: TimeOfDay.now(),
-  //       category: Category.Travel),
-  //   Expense(
-  //       title: 'Gifts',
-  //       amount: 215,
-  //       date: DateTime.now(),
-  //       time: TimeOfDay.now(),
-  //       category: Category.Other),
-  //   Expense(
-  //       title: 'Gas',
-  //       amount: 145.00,
-  //       date: DateTime.now(),
-  //       time: TimeOfDay.now(),
-  //       category: Category.Transportation),
-  //   Expense(
-  //       title: 'Movie',
-  //       amount: 70.00,
-  //       date: DateTime.now(),
-  //       time: TimeOfDay.now(),
-  //       category: Category.Entertainment),
-  //   Expense(
-  //       title: 'Shirt',
-  //       amount: 200.00,
-  //       date: DateTime.now(),
-  //       time: TimeOfDay.now(),
-  //       category: Category.Clothing),
-  //   Expense(
-  //       title: 'Panadol',
-  //       amount: 30.00,
-  //       date: DateTime.now(),
-  //       time: TimeOfDay.now(),
-  //       category: Category.Medical),
-  //   Expense(
-  //       title: 'Tips',
-  //       amount: 20.00,
-  //       date: DateTime.now(),
-  //       time: TimeOfDay.now(),
-  //       category: Category.Other),
-  // ];
-
   void _loadExpenses() async {
     final url = Uri.https(
         'flutter-expenses-app-51adc-default-rtdb.firebaseio.com',
         'expenses-list.json');
     try {
       final response = await http.get(url);
+      setState(() {
+        isLoading = false;
+      });
       if (response.body == 'null') {
         setState(() {
           errorMsg = 'Something went wrong! Try again.';
@@ -99,7 +52,6 @@ class _ExpensesState extends State<Expenses> {
       final Map<String, dynamic> loadedList = json.decode(response.body);
       setState(() {
         for (final expense in loadedList.entries) {
-          print(expense);
           _expenses.add(Expense(
             id: expense.key,
             title: expense.value['title'],
@@ -202,7 +154,8 @@ class _ExpensesState extends State<Expenses> {
       ),
       body: Container(
           padding: const EdgeInsets.fromLTRB(5, 10, 5, 5),
-          child: width < 600
+          child: isLoading ? const Center(child:CircularProgressIndicator())
+              : width < 600
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

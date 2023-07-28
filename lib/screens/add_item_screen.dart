@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:expenses_tracker_app/models/expense.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -37,19 +35,35 @@ class _AddItemState extends State<AddItem> {
       padding: EdgeInsets.fromLTRB(10, 0, 10, keyBoardSpace),
       child: Column(
         children: [
-          Container(
-            alignment: Alignment.topRight,
-            child: TextButton(
-              onPressed: () => Navigator.pop(context),
-              style: TextButton.styleFrom(
-                  visualDensity: VisualDensity.compact,
-                  padding: const EdgeInsets.only(left: 50)),
-              child: Icon(
-                Icons.close,
-                color: colorScheme.primary,
-                size: 20,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () => _formKey.currentState?.reset(),
+                style: TextButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                    padding: const EdgeInsets.only(right: 10)
+                  ),
+                child: Text(
+                  'Reset',
+                  style: TextStyle(
+                    color: colorScheme.primary,
+                  ),
+                ),
               ),
-            ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                style: TextButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                    padding: const EdgeInsets.only(left: 30)
+                  ),
+                child: Icon(
+                  Icons.close,
+                  color: colorScheme.primary,
+                  size: 20,
+                ),
+              ),
+            ],
           ),
           Form(
               key: _formKey,
@@ -65,6 +79,14 @@ class _AddItemState extends State<AddItem> {
                     onSaved: (value) {
                       _title = value!;
                     },
+                    validator: (value) {
+                      if (value == null ||
+                          value.trim().length >= 15 ||
+                          value.trim().length <= 1) {
+                        return 'Title must be between 1 and 15 characters';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(
                     height: 10,
@@ -79,6 +101,14 @@ class _AddItemState extends State<AddItem> {
                     ),
                     onSaved: (value) {
                       _amount = value!;
+                    },
+                    validator: (value) {
+                      if (value == null ||
+                          value.trim().isEmpty ||
+                          value!.startsWith('-')) {
+                        return 'Amount must be a positive value';
+                      }
+                      return null;
                     },
                   ),
                   const SizedBox(
@@ -218,23 +248,10 @@ class _AddItemState extends State<AddItem> {
             ),
             onPressed: () {
               _formKey.currentState!.save();
-              print(_title + _amount + _dateString);
-              if (_title.trim().isEmpty ||
-                  _amount.trim().isEmpty ||
-                  _dateString == '') {
+              if (_dateString == '') {
                 print('please input all fields');
                 return;
-              } else if (_amount.startsWith('-')) {
-                print('please input a valid amount');
-                return;
               }
-              // Map<String, dynamic> expenseMap = {
-              //   'title': _title,
-              //   'amount': _amount,
-              //   'date': _dateController,
-              //   'time': _timeController,
-              //   'category': _category
-              // };
               widget.addExpenseHandler(Expense(
                 id: ' ',
                 title: _title,

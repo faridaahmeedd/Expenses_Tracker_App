@@ -27,12 +27,7 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode =
-        MediaQuery.of(context).platformBrightness == Brightness.dark;
-    // buckets.categoryExpenses.forEach((key, value) {
-    //   print(key);
-    //   print(buckets.getTotalForCategory(key));
-    // });
+    final isDarkMode = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.symmetric(
