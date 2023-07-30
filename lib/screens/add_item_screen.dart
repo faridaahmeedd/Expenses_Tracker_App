@@ -247,20 +247,22 @@ class _AddItemState extends State<AddItem> {
               ),
             ),
             onPressed: () {
-              _formKey.currentState!.save();
-              if (_dateString == '') {
-                print('please input all fields');
-                return;
+              if(_formKey.currentState!.validate()){
+                if (_dateString == '') {
+                  print('please input all fields');
+                  return;
+                }
+                _formKey.currentState!.save();
+                widget.addExpenseHandler(Expense(
+                  id: ' ',
+                  title: _title,
+                  amount: double.parse(_amount),
+                  date: _dateController,
+                  category: _category,
+                  // time: TimeOfDay.expense.value['time'])
+                ));
+                Navigator.pop(context);
               }
-              widget.addExpenseHandler(Expense(
-                id: ' ',
-                title: _title,
-                amount: double.parse(_amount),
-                date: _dateController,
-                category: _category,
-                // time: TimeOfDay.expense.value['time'])
-              ));
-              Navigator.pop(context);
             },
             icon: Icon(Icons.add, color: colorScheme.onPrimary, size: 19),
             label: Text(
