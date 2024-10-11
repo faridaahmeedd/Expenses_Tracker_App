@@ -32,7 +32,7 @@ class _AddItemState extends State<AddItem> {
         .viewInsets
         .bottom; //this line is added to fix the bottom overflow issue  from the keyboard
     return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, keyBoardSpace),
+      padding: EdgeInsets.fromLTRB(22, 0, 22, keyBoardSpace),
       child: Column(
         children: [
           Row(
